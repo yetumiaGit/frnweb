@@ -155,16 +155,13 @@
   ];
 
   /* =====================================================================
-     SLIDES DU HERO
-     Remplacez les URLs par vos propres images.
-     Utilisez le format : https://drive.google.com/uc?export=view&id=FILE_ID
-     ou une URL directe (Imgur, Cloudinary, GitHub, etc.)
+     SLIDES DU HERO — URLs Flickr (images statiques, format b = 1024px)
      ===================================================================== */
   var HERO_SLIDES = [
     {
       id: 'slide-1',
-      /* Image 1 — remplacez par votre URL directe */
-      src: 'https://drive.google.com/uc?export=view&id=10DFXMYT_W_oDhG94zBU1Su9kxaMKmL6H',
+      src: 'https://live.staticflickr.com/65535/55593182316_df4a02de1e_b.jpg',
+      width: 1024,
       altFr: 'Visuel institutionnel du FRN — design 1',
       altEn: 'FRN institutional visual — design 1',
       captionFr: 'Refonder la nation, penser l’avenir.',
@@ -172,8 +169,8 @@
     },
     {
       id: 'slide-2',
-      /* Image 2 — remplacez par votre URL directe */
-      src: 'https://drive.google.com/uc?export=view&id=1cSuv_GQWOXRGobIbEKqpl4QfL8hiAJTP',
+      src: 'https://live.staticflickr.com/65535/55593369174_7ec09511c9_b.jpg',
+      width: 1024,
       altFr: 'Visuel institutionnel du FRN — design 2',
       altEn: 'FRN institutional visual — design 2',
       captionFr: 'Ensemble pour une nation refondée.',
@@ -651,9 +648,6 @@
 
   /* =====================================================================
      HERO SLIDER
-     - Fait défiler HERO_SLIDES toutes les 4 secondes
-     - Navigation par points (dots) + flèches
-     - Pause au survol (desktop)
      ===================================================================== */
   function HeroSlider(props) {
     var slides = props.slides;
@@ -666,7 +660,6 @@
 
     var pausedRef = useRef(false);
 
-    /* Rotation automatique toutes les 4 secondes */
     useEffect(function () {
       if (slides.length <= 1) return;
       var timer = setInterval(function () {
@@ -690,7 +683,6 @@
       role: 'region',
       'aria-label': t.hero.imageCaption
     },
-      /* Piste des slides */
       React.createElement('div', { className: 'relative aspect-[4/3] w-full' },
         slides.map(function (slide, i) {
           var isActive = i === index;
@@ -701,12 +693,12 @@
           },
             React.createElement('img', {
               src: slide.src,
+              width: slide.width || undefined,
               alt: lang === 'fr' ? slide.altFr : slide.altEn,
               className: 'h-full w-full object-cover',
               loading: i === 0 ? 'eager' : 'lazy',
               draggable: 'false'
             }),
-            /* Légende optionnelle */
             (slide.captionFr || slide.captionEn)
               ? React.createElement('div', {
                   className: 'absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900/70 to-transparent p-4 sm:p-6'
@@ -720,7 +712,6 @@
         })
       ),
 
-      /* Flèches (desktop / tablette) */
       slides.length > 1 ? React.createElement(React.Fragment, null,
         React.createElement('button', {
           type: 'button',
@@ -744,7 +735,6 @@
         )
       ) : null,
 
-      /* Points de navigation */
       slides.length > 1 ? React.createElement('div', {
         className: 'absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2'
       },
@@ -943,7 +933,6 @@
         React.createElement('div', { className: 'flex h-14 items-center justify-between gap-2 lg:h-20' },
           React.createElement('a', { href: '#/', className: 'focus-ring flex min-w-0 items-center gap-2.5 rounded-md' },
             React.createElement(FrnLogo, { className: 'h-8 w-auto shrink-0 lg:h-11', alt: props.t.ui.logoAlt }),
-            /* Le texte est maintenant TOUJOURS visible, sur toutes les tailles d'écran */
             React.createElement('span', { className: 'flex min-w-0 flex-col leading-tight' },
               React.createElement('span', { className: 'text-[13px] font-extrabold uppercase tracking-wider text-frnblue lg:text-sm' }, props.t.brand.short),
               React.createElement('span', { className: 'text-[10px] font-medium leading-tight text-slate-500 sm:text-[11px] lg:text-[11px]' }, props.t.brand.full)
@@ -1100,7 +1089,6 @@
                 React.createElement('button', { type: 'button', onClick: function () { scrollToId('qui-sommes-nous'); }, className: BTN_SECONDARY }, c.hero.cta2)
               )
             ),
-            /* SLIDER À LA PLACE DE L'IMAGE STATIQUE */
             React.createElement('div', { className: 'order-first lg:order-none' },
               React.createElement(HeroSlider, { slides: HERO_SLIDES, lang: props.lang, t: c })
             )
